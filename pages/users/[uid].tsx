@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { User } from '../../models/User'
 import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
+import Layout from '../../components/Layout'
 
 type Query = {
   uid: string
@@ -35,32 +36,13 @@ export default function UserShow() {
   }, [query.uid])
 
   return (
-    <div>
-      <nav
-        className='navbar navbar-expand-lg navbar-light mb-3'
-        style={{ backgroundColor: '#e3f2fd' }}
-      >
-        <div className='container'>
-          <div className='mr-auto'>
-            <a className='navbar-brand' href='#'>
-              Navbar
-            </a>
-          </div>
-          <form className='d-flex'>
-            <button className='btn btn-outline-primary' type='submit'>
-              Search
-            </button>
-          </form>
+    <Layout>
+      {user && (
+        <div className='text-center'>
+          <h1 className='h4'>{user.name}さんのページ</h1>
+          <div className='m-5'>{user.name}さんに質問しよう！</div>
         </div>
-      </nav>
-      <div className='container'>
-        {user && (
-          <div className='text-center'>
-            <h1 className='h4'>{user.name}さんのページ</h1>
-            <div className='m-5'>{user.name}さんに質問しよう！</div>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </Layout>
   )
 }
