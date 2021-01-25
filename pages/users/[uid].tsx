@@ -3,6 +3,7 @@ import { User } from '../../models/User'
 import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
 import Layout from '../../components/Layout'
+import { toast } from 'react-toastify'
 
 type Query = {
   uid: string
@@ -50,7 +51,15 @@ export default function UserShow() {
     })
     setIsSending(false)
     setBody('')
-    alert('質問を送信しました。')
+    toast.success('質問を送信しました。', {
+      position: 'bottom-left',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
   }
 
   return (
