@@ -9,11 +9,15 @@ type Query = {
   id: string
 }
 
+async function onSubmit() {}
+
 export default function QuestionsShow() {
   const router = useRouter()
   const query = router.query as Query
   const { user } = useAuthentication()
   const [question, setQuestion] = useState<Question>(null)
+  const [body, setBody] = useState('')
+  const [isSending, setIsSending] = useState(false)
 
   async function loadData() {
     if (query.id === undefined) {
@@ -47,6 +51,32 @@ export default function QuestionsShow() {
               <div className='card-body'>{question.body}</div>
             </div>
           )}
+          <section className='text-center mt-4'>
+            <h2 className='h4'>回答する</h2>
+
+            <form onSubmit={onSubmit}>
+              <textarea
+                className='form-control'
+                placeholder='おげんきですか？'
+                rows={6}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                required
+              ></textarea>
+              <div className='m-3'>
+                {isSending ? (
+                  <div
+                    className='spinner-border text-secondary'
+                    role='status'
+                  ></div>
+                ) : (
+                  <button type='submit' className='btn btn-primary'>
+                    回答する
+                  </button>
+                )}
+              </div>
+            </form>
+          </section>
         </div>
       </div>
     </Layout>
