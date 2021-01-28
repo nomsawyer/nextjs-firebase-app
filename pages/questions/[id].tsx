@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
 import Layout from '../../components/Layout'
@@ -8,8 +8,6 @@ import { useAuthentication } from '../../hooks/authentication'
 type Query = {
   id: string
 }
-
-async function onSubmit() {}
 
 export default function QuestionsShow() {
   const router = useRouter()
@@ -41,6 +39,25 @@ export default function QuestionsShow() {
   useEffect(() => {
     loadData()
   }, [query.id])
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setIsSending(true)
+
+    await firebase.firestore().runTransaction(async (t) => {
+      t.set(firebase.firestore().collection('answers').doc(), {
+        uid: user.uid,
+        questionId: question.id,
+        body,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      t.update(firebase.firestore().collection('questions').doc(question.id), {
+        isReplied: true,
+      })
+    })
+
+    setIsSending(false)
+  }
 
   return (
     <Layout>
